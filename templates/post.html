@@ -1,0 +1,21 @@
+<html>
+<body>
+
+
+{% if post %}
+    <p>
+{#    <input type="hidden" name="id" value="{{ post.id }}" />#}
+    {{ post.title }} <br />
+    {{ post.text }}
+    <br />
+        <a href="{% url 'blog:update' post.id %}">Edit</a>
+
+    </p>
+    {% else %}
+    {{ Sorry }}
+
+{% endif %}
+
+</body>
+</html>
+

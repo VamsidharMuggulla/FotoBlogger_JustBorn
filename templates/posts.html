@@ -1,0 +1,69 @@
+<div class="container" style="align-content: center;">
+
+    {% for post in posts %}
+
+  <div id="post{{ post.id }}">
+
+            <h3 id="namee{{ post.id }}">
+        {{ post.name }}</h3>
+            <i id="author{{ post.id }}"><span style="font-size: 10px; padding: 0px">Posted by</span> {{ post.author }}</i><br>
+            <span style="font-size: 8px; color: #737373">at {{ post.date }}</span>
+            {% if post.author == user %}
+{#           <button onclick="edit({{ post.id }},{{ post.name }})">Edit</button>#}
+                <a data-toggle="modal" href="#mymodal{{ post.id }}">Edit</a>
+        {% endif %}
+
+
+            <img class="img-responsive" src= "{{ post.foto.url }}" alt="{{ post.foto }}" />
+        <br>
+        <button style="background-color: Transparent;border: none;" class="omg glyphicon glyphicon-thumbs-up" onclick="likeit('{{ post.id }}')"> <span id="likess{{ post.id }}" data-toggle="tooltip" title="Like">{{ post.likes }}</span></button>&nbsp;&nbsp;&nbsp;&nbsp;
+{#        <a href="#"> <span class="glyphicon glyphicon-comment" data-toggle="tooltip" title="Comment"></span></a>#}
+                <hr class="divider" style="width: 40%;">
+
+        <div class="modal fade" id="mymodal{{ post.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Edit Post</h4>
+        </div>
+        <div class="modal-body">
+                <input id="updating" type="text" class="form-control" placeholder="{{ post.name }}" required/>
+            or<br>
+            <input type="button" class="btn btn-danger" value="Delete" onclick="deletefoto({{ post.id }},'#post{{ post.id }}','#mymodal{{ post.id }}')" />
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="editfoto({{ post.id }},'#namee{{ post.id }}')">Save changes</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+</div>
+    {% endfor %}
+
+
+ <!-- Button trigger modal -->
+{#  <a data-toggle="modal" href="#myModal1" class="btn btn-primary btn-lg">Launch demo modal</a>#}
+
+  <!-- Modal -->
+{#  <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">#}
+{#    <div class="modal-dialog">#}
+{#      <div class="modal-content">#}
+{#        <div class="modal-header">#}
+{#          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>#}
+{#          <h4 class="modal-title">Edit Post</h4>#}
+{#        </div>#}
+{#        <div class="modal-body">#}
+{#          #}
+{#        </div>#}
+{#        <div class="modal-footer">#}
+{#          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>#}
+{#          <button type="button" class="btn btn-primary">Save changes</button>#}
+{#        </div>#}
+{#      </div><!-- /.modal-content -->#}
+{#    </div><!-- /.modal-dialog -->#}
+{#  </div><!-- /.modal -->#}
+
+</div>

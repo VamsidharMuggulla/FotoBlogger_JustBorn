@@ -1,0 +1,7 @@
+{% if post %}
+<form method="post" action="">
+    <input type="text" name="title" value="{{ post.title }}" /> <br>
+    <input name="code" type="textarea" value="{{ post.text }}"/><br>
+    <input type="submit" id="but" name="submit" value="Update"/>
+</form>
+{% endif %}

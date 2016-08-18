@@ -1,0 +1,315 @@
+{% extends 'site_base.html' %}
+{% block LeftNav %}
+    <li><a id="home" href="#">Home</a></li>
+    <li><a id="posts" href="#">MyPosts</a></li>
+    <li><a id="update" href="#">Update</a></li>
+{% endblock %}
+
+
+{% block RightNav %}
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ user }}
+            <span class="caret"></span></a>
+        <ul class="dropdown-menu" role="menu">
+            <li><a href="/">Home</a></li>
+            <li><a id="profile" href="#">Profile</a></li>
+            <li class="divider"></li>
+            <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> &nbsp;&nbsp;Logout</a></li>
+        </ul>
+    </li>
+{% endblock %}
+{% block content %}
+    <div id="thecontent" class="container">
+    </div>
+    <script>
+
+    function deletefoto(fotoid,postid,modelid) {
+
+        x=$("input[id^='updating']").val()
+    console.log($("input[id^='updating']").val())
+        $.ajax({
+                url: '/edit/',
+                type: 'POST',
+                data: {
+                    operation:'delete',
+                    name: $("input[id^='updating']").val(),
+                    id:fotoid
+
+                },
+                beforeSend: function (xhr, settings) {
+                    if (settings.type == 'POST' || settings.type == 'PUT' || settings.type == 'DELETE') {
+
+                        if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                            // Only send the token to relative URLs i.e. locally.
+                            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                        }
+                    }
+                },
+                dataType: 'text',
+                contentType: 'application/x-www-form-urlencoded',
+                success: function (data, textStatus, jQxhr) {
+
+                    //resp = JSON.parse(data);
+                    console.log(data);
+                    if (data=='OK') {
+                        $('.modal.in').modal('hide');
+                        $(postid).remove();
+                    }
+
+                },
+                error: function (jqXhr, textStatus, errorThrown) {
+                    console.log(errorThrown);
+                }
+            });
+
+
+    }
+    function editfoto(fotoid,postnameid) {
+    console.log($("input[id^='updating']").val())
+
+        $.ajax({
+                url: '/edit/',
+                type: 'POST',
+                data: {
+                    operation:'edit',
+                    name: '',
+                    id:fotoid
+
+                },
+                beforeSend: function (xhr, settings) {
+                    if (settings.type == 'POST' || settings.type == 'PUT' || settings.type == 'DELETE') {
+
+                        if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                            // Only send the token to relative URLs i.e. locally.
+                            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                        }
+                    }
+                },
+                dataType: 'text',
+                contentType: 'application/x-www-form-urlencoded',
+                success: function (data, textStatus, jQxhr) {
+
+                    //resp = JSON.parse(data);
+                    console.log(data);
+                    if (data=='EDITED') {
+                        $('.modal.in').modal('hide');
+                        $(postnameid).text($("input[id^='updating']").val());
+
+                    }
+
+                },
+                error: function (jqXhr, textStatus, errorThrown) {
+                    console.log(errorThrown);
+                }
+            });
+
+
+    }
+
+        function likeit(fotoid) {
+            console.log('LIKED')
+            {#    #}
+            {#     $('#like').tooltip({ items: "#like", content: "Thank you!!!"});#}
+            {#    $('#like').tooltip("open");#}
+            {#    $('#like').onmouseout(function () {#}
+            {#        $('#like').tooltip("disable");#}
+            {#    });#}
+
+            $.ajax({
+                url: '/likeit/',
+                type: 'POST',
+                data: {fotoid},
+                beforeSend: function (xhr, settings) {
+                    if (settings.type == 'POST' || settings.type == 'PUT' || settings.type == 'DELETE') {
+
+                        if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                            // Only send the token to relative URLs i.e. locally.
+                            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                        }
+                    }
+                },
+                dataType: 'text',
+                contentType: 'application/x-www-form-urlencoded',
+                success: function (data, textStatus, jQxhr) {
+
+                    //resp = JSON.parse(data);
+                    console.log(data);
+                    $('#likess'+fotoid).text(data);
+                },
+                error: function (jqXhr, textStatus, errorThrown) {
+                    console.log(errorThrown);
+                }
+            });
+
+
+        }
+        $(document).ready(function () {
+
+            $.ajax({
+                url: '/allposts/',
+                type: 'POST',
+                data: {},
+                beforeSend: function (xhr, settings) {
+                    if (settings.type == 'POST' || settings.type == 'PUT' || settings.type == 'DELETE') {
+
+                        if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                            // Only send the token to relative URLs i.e. locally.
+                            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                        }
+                    }
+                },
+                dataType: 'text',
+                contentType: 'application/x-www-form-urlencoded',
+                success: function (data, textStatus, jQxhr) {
+                    console.log("Hi");
+                    //resp = JSON.parse(data);
+                    console.log(data);
+                    console.log(getCookie('csrftoken'))
+                    $("#thecontent").html(data);
+                },
+                error: function (jqXhr, textStatus, errorThrown) {
+                    console.log(errorThrown);
+                }
+            });
+
+
+            $("#home").click(function () {
+
+                $.ajax({
+                    url: '/allposts/',
+                    type: 'POST',
+                    data: {},
+                    beforeSend: function (xhr, settings) {
+                        if (settings.type == 'POST' || settings.type == 'PUT' || settings.type == 'DELETE') {
+
+                            if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                                // Only send the token to relative URLs i.e. locally.
+                                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                            }
+                        }
+                    },
+                    dataType: 'text',
+                    contentType: 'application/x-www-form-urlencoded',
+                    success: function (data, textStatus, jQxhr) {
+                        console.log("Hi");
+                        //resp = JSON.parse(data);
+                        console.log(data);
+                        console.log(getCookie('csrftoken'))
+                        $("#thecontent").html(data);
+                    },
+                    error: function (jqXhr, textStatus, errorThrown) {
+                        console.log(errorThrown);
+                    }
+                });
+
+            });
+
+
+            $("#profile").click(function () {
+
+                $.ajax({
+                    url: '/accounts/profile/',
+                    type: 'POST',
+                    data: {},
+                    beforeSend: function (xhr, settings) {
+                        if (settings.type == 'POST' || settings.type == 'PUT' || settings.type == 'DELETE') {
+
+                            if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                                // Only send the token to relative URLs i.e. locally.
+                                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                            }
+                        }
+                    },
+                    dataType: 'text',
+                    contentType: 'application/x-www-form-urlencoded',
+                    success: function (data, textStatus, jQxhr) {
+                        console.log("Hi");
+                        //resp = JSON.parse(data);
+{#                        console.log(data);#}
+{#                        console.log(getCookie('csrftoken'))#}
+                        $("#thecontent").html(data);
+                    },
+                    error: function (jqXhr, textStatus, errorThrown) {
+                        console.log(errorThrown);
+                    }
+                });
+
+            });
+
+
+
+            $("#update").click(function () {
+                $.ajax({
+                    url: '/publish/',
+                    type: 'POST',
+                    data: {},
+                    beforeSend: function (xhr, settings) {
+                        if (settings.type == 'POST' || settings.type == 'PUT' || settings.type == 'DELETE') {
+
+                            if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                                // Only send the token to relative URLs i.e. locally.
+                                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                            }
+                        }
+                    },
+                    dataType: 'text',
+                    contentType: 'application/x-www-form-urlencoded',
+                    success: function (data, textStatus, jQxhr) {
+                        console.log("Hi");
+                        //resp = JSON.parse(data);
+                        console.log(data);
+                        console.log(getCookie('csrftoken'))
+                        $("#thecontent").html(data);
+                    },
+                    error: function (jqXhr, textStatus, errorThrown) {
+                        console.log(errorThrown);
+                    }
+                });
+            });
+        });
+        $("#posts").click(function () {
+            $.ajax({
+                url: '/myposts/',
+                type: 'POST',
+                data: {},
+                beforeSend: function (xhr, settings) {
+                    if (settings.type == 'POST' || settings.type == 'PUT' || settings.type == 'DELETE') {
+
+                        if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                            // Only send the token to relative URLs i.e. locally.
+                            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                        }
+                    }
+                },
+                dataType: 'text',
+                contentType: 'application/x-www-form-urlencoded',
+                success: function (data, textStatus, jQxhr) {
+                    console.log("Hi");
+                    //resp = JSON.parse(data);
+                    console.log(data);
+                    {#                        console.log(getCookie('csrftoken'))#}
+                    $("#thecontent").html(data);
+                },
+                error: function (jqXhr, textStatus, errorThrown) {
+                    console.log(errorThrown);
+                }
+            });
+        });
+
+
+        function getCookie(cname) {
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,18 @@
+<div class="form-group">
+    <h3>
+        Publish your Posts
+    </h3>
+    <form role="form" method="POST" action="{% url 'blog:publish' %}" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        <div class="form-group">
+            <input class="form-control" id="name" type="text" name="{{ form.name.name }}" placeholder="Name your foto" required />
+        </div>
+
+        <div class="form-group">
+            <input class="form-control" type="file" name="{{ form.foto.name }}" required />
+        </div>
+        <div class="form-group"><input type="submit" class="btn btn-primary" value="Publish" /></div>
+    </form>
+</div>
